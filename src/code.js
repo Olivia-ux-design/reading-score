@@ -20,6 +20,7 @@ function words(string) {
     return string.split(" ").length
 }
 
+
 function sentences(string) {
     return string.split(". ").length
 }
@@ -27,9 +28,15 @@ function sentences(string) {
 figma.showUI(__html__);
 
 figma.ui.onmessage = msg => {
-    if (msg.type === 'create-rectangles') {
-        var numberOfSyllables = syllable('syllable')
-        console.log(numberOfSyllables)
+    if (msg.type === 'check-text') {
+        var numberOfSyllables = syllable(msg.text)
+        // console.log(numberOfSyllables)
+        var numberOfWords = words(msg.text)
+        // console.log(numberOfWords)
+        var numberOfSentences = sentences(msg.text)
+        // console.log(numberOfSentences)
+        var readingScore = flesch({ word: numberOfWords, syllable: numberOfSyllables, sentence: numberOfSentences })
+        // console.log(readingScore)
+        figma.ui.postMessage(readingScore)
     }
-    figma.closePlugin();
 };

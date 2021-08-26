@@ -1,17 +1,16 @@
-<h2>Rectangle Creator</h2>
-<p>Count: <input id="count" value="5"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
+<h2>Flesch reading score check</h2>
+<textarea id="text"> </textarea>
+<button id="create">Check score</button>
+<h1 id="display"></h1>
+
 <script>
-
-document.getElementById('create').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
-}
-
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
-
+  document.getElementById('create').onclick = () => {
+    const textbox = document.getElementById('text');
+    const text = textbox.value
+    parent.postMessage({ pluginMessage: { type: 'check-text', text } }, '*')
+  }
+  onmessage = (event) => {
+    console.log("got this from the plugin code", event.data.pluginMessage)
+    document.getElementById('display').innerText = event.data.pluginMessage
+  }
 </script>
