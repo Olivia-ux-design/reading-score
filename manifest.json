@@ -3,5 +3,6 @@
   "id": "1007652201122225890",
   "api": "1.0.0",
   "main": "./dist/bundle.js",
-  "ui": "ui.html"
+  "ui": "ui.html",
+  "editorType": ["figma"]
 }
