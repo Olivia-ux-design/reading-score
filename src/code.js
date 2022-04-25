@@ -6,7 +6,7 @@ var base = 206.835;
 
 function flesch (counts) {
   if (!counts || !counts.sentence || !counts.word || !counts.syllable) {
-    return Number.NaN;
+    return Number.NaN || 0;
   }
 
   const total = Number(
@@ -19,17 +19,11 @@ function flesch (counts) {
   if (total > 100) return 100;
 
   return total;
-
-	//   return Number(
-	// 		(base -
-	// 			sentenceWeight * (counts.word / counts.sentence) -
-	// 			wordWeight * (counts.syllable / counts.word)).toPrecision(2)
-	// 	);
 }
 
 function grade (counts) {
   if (!counts || !counts.sentence || !counts.word || !counts.syllable) {
-    return Number.NaN;
+    return Number.NaN || 0;
   }
 
   const total = Math.round(
@@ -108,7 +102,7 @@ figma.on('selectionchange', e => {
 
   if (selection && selection.type === 'TEXT' && selection.characters.length) {
     var numberOfSyllables = syllable(selection.characters);
-    console.log(numberOfSyllables);
+		// console.log(numberOfSyllables);
     var numberOfWords = words(selection.characters);
 		// console.log(numberOfWords)
     var numberOfSentences = sentences(selection.characters);
