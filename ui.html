@@ -1,19 +1,17 @@
-<!-- <section id="main"> -->
 <section class="container">
 	<h1 class="score-header">Your Readability Score</h1>
 	<!-- <textarea id="text" style="margin-bottom: 5px; height: 100px; font: inherit">Enter text you want to score </textarea> -->
 	<!-- <button id="create">Check score</button> -->
 	<h2 id="display" class="score">0</h2>
 
-	<button onclick="switchPanel(1)">Show Grade</button>
+	<button onclick="switchPanel(1)">Show Age</button>
 </section>
 <section class="container">
-	<h1 class="score-header">Your Readability Grade</h1>
-	<p class="subheader"><i>(Equivalent to US grade of education)</i></p>
+	<h1 class="score-header">Your Readability Age</h1>
+	<!-- <p class="subheader"><i>(Equivalent to US grade of education)</i></p> -->
 	<h2 id="grade-display" class="score">0</h2>
 	<button onclick="switchPanel(1)">Show Score</button>
 </section>
-<!-- </section> -->
 
 <script>
 	const checkScore = () => {
@@ -31,10 +29,11 @@
 			}, timeout);
 		};
 	}
+
 	//   document.getElementById("text").addEventListener("input", debounce(() => checkScore(), 500)
 	// 		);
-
 	// document.getElementById("create").onclick = () => checkScore();
+
 	onmessage = (event) => {
 		console.log("got this from the plugin code", event.data.pluginMessage);
 		document.getElementById("display").innerText =
@@ -68,14 +67,12 @@
 <style>
 	body {
 		font-family: Inter, sans-serif;
-		/* height: 100vh; */
 		padding: 0;
 	}
 
 	button {
 		border: 1px solid rgba(0, 0, 0, 0.54);
 		padding: 2px 4px;
-		/* font-weight: bolder; */
 		border-radius: 4px;
 		color: #607d8b;
 		box-sizing: border-box;

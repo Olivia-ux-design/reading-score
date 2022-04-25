@@ -36,19 +36,12 @@ function grade (counts) {
 		0.39 * (counts.word / counts.sentence) +
 			11.8 * (counts.syllable / counts.word) -
 			15.59
-	).toPrecision(2);
+	);
 
   if (total < 0) return 0;
   if (total > 18) return 18;
 
   return total;
-
-	//   console.log(
-	// 		'grade: ',
-	// 		0.39 * (counts.word / counts.sentence) +
-	// 			11.8 * (counts.syllable / counts.word) -
-	// 			15.59
-	// 	);
 }
 
 function words (string) {
@@ -79,15 +72,28 @@ figma.ui.onmessage = msg => {
   }
 };
 
-function debounce (func, timeout = 300) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
+const scoreToAgeObj = {
+  'Under 6': 0,
+  '6 - 7': 1,
+  '7 - 8': 2,
+  '8 - 9': 3,
+  '9 - 10': 4,
+  '10 - 11': 5,
+  '11 - 12': 6,
+  '12 - 13': 7,
+  '13 - 14': 8,
+  '14 - 15': 9,
+  '15 - 16': 10,
+  '16 - 17': 11,
+  '17 - 18': 12
+};
+
+const scoreToAge = e => {
+  for (const [key, value] of Object.entries(scoreToAgeObj)) {
+    if (e === value) return key;
+    if (e > 12) return 'Over 18';
+  }
+};
 
 figma.ui.resize(300, 250);
 
@@ -119,8 +125,10 @@ figma.on('selectionchange', e => {
       sentence: numberOfSentences
     });
 
-    const results = { score: readingScore, grade: readingGrade };
-		// console.log(readingScore)
+    var readingAge = scoreToAge(readingGrade);
+
+    const results = { score: readingScore, grade: readingAge };
+
     figma.ui.postMessage(results);
   }
 });
