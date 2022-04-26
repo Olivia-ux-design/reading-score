@@ -2,14 +2,14 @@
 	<h1 class="score-header">Your Readability Score</h1>
 	<!-- <textarea id="text" style="margin-bottom: 5px; height: 100px; font: inherit">Enter text you want to score </textarea> -->
 	<!-- <button id="create">Check score</button> -->
-	<h2 id="display" class="score">0</h2>
+	<h2 id="display" class="score">No Text</h2>
 
 	<button onclick="switchPanel(1)">Show Age</button>
 </section>
 <section class="container">
 	<h1 class="score-header">Your Readability Age</h1>
 	<!-- <p class="subheader"><i>(Equivalent to US grade of education)</i></p> -->
-	<h2 id="grade-display" class="score">0</h2>
+	<h2 id="grade-display" class="score">No Text</h2>
 	<button onclick="switchPanel(1)">Show Score</button>
 </section>
 
@@ -20,21 +20,18 @@
 		parent.postMessage({ pluginMessage: { type: "check-text", text } }, "*");
 	};
 
-	function debounce(func, timeout = 300) {
-		let timer;
-		return (...args) => {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				func.apply(this, args);
-			}, timeout);
-		};
-	}
-
-	//   document.getElementById("text").addEventListener("input", debounce(() => checkScore(), 500)
-	// 		);
-	// document.getElementById("create").onclick = () => checkScore();
+	// Part of the dodgy workaround
+	const changeDisplayFontSize = (size) => {
+		(document.getElementById("display").style.fontSize = size),
+			(document.getElementById("grade-display").style.fontSize = size);
+	};
 
 	onmessage = (event) => {
+		// I apologise for this hacky workaround that doesn't even really need to exist.
+		event.data.pluginMessage.score === "I can't do numbers :("
+			? changeDisplayFontSize("1.5em")
+			: changeDisplayFontSize("3em");
+
 		console.log("got this from the plugin code", event.data.pluginMessage);
 		document.getElementById("display").innerText =
 			event.data.pluginMessage.score;
@@ -43,15 +40,14 @@
 	};
 
 	let slideIndex = 1;
-	showPanels(slideIndex);
 
 	// Next/previous controls
-	function switchPanel(n) {
+	const switchPanel = (n) => {
 		showPanels((slideIndex += n));
-	}
+	};
 
-	function showPanels(n) {
-		let panels = document.getElementsByClassName("container");
+	const showPanels = (n) => {
+		const panels = document.getElementsByClassName("container");
 		if (n > panels.length) {
 			slideIndex = 1;
 		}
@@ -61,7 +57,9 @@
 
 		for (let panel of panels) panel.style.display = "none";
 		panels[slideIndex - 1].style.display = "flex";
-	}
+	};
+
+	showPanels(slideIndex);
 </script>
 
 <style>
@@ -71,6 +69,7 @@
 	}
 
 	button {
+		margin-bottom: 12px;
 		border: 1px solid rgba(0, 0, 0, 0.54);
 		padding: 2px 4px;
 		border-radius: 4px;
@@ -100,7 +99,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		padding: 5px;
 		border: 1px solid rgba(0, 0, 0, 0.54);
 		border-radius: 4px;
@@ -116,7 +115,7 @@
 		align-items: center;
 		font-size: 3em;
 		margin-top: 0.2em;
-		margin-bottom: 0.2em;
+		margin-bottom: 0.5em;
 	}
 
 	.subheader {
