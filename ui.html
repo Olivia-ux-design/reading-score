@@ -1,3 +1,4 @@
+<button class="btn-toggle">&#9788;</button>
 <section class="container">
 	<h1 class="score-header">Your Readability Score</h1>
 	<!-- <textarea id="text" style="margin-bottom: 5px; height: 100px; font: inherit">Enter text you want to score </textarea> -->
@@ -14,11 +15,31 @@
 </section>
 
 <script>
-	const checkScore = () => {
-		const textbox = document.getElementById("text");
-		const text = textbox.value;
-		parent.postMessage({ pluginMessage: { type: "check-text", text } }, "*");
-	};
+	const btn = document.querySelector(".btn-toggle");
+
+	btn.addEventListener("click", function () {
+		document.body.classList.toggle("dark-theme");
+
+		const isDark = document.body.classList.contains("dark-theme");
+
+		// isDark ? (btn.innerHTML = "&#9788;") : (btn.innerHTML = "&#9789;");
+
+		parent.postMessage(
+			{
+				pluginMessage: {
+					type: "theme-change",
+					theme: isDark ? "dark" : "light"
+				}
+			},
+			"*"
+		);
+	});
+
+	// const checkScore = () => {
+	// 	const textbox = document.getElementById("text");
+	// 	const text = textbox.value;
+	// 	parent.postMessage({ pluginMessage: { type: "check-text", text } }, "*");
+	// };
 
 	// Part of the dodgy workaround
 	const changeDisplayFontSize = (size) => {
@@ -27,16 +48,25 @@
 	};
 
 	onmessage = (event) => {
-		// I apologise for this hacky workaround that doesn't even really need to exist.
-		event.data.pluginMessage.score === "I can't do numbers :("
-			? changeDisplayFontSize("1.5em")
-			: changeDisplayFontSize("3em");
+		const msg = event.data.pluginMessage;
 
-		console.log("got this from the plugin code", event.data.pluginMessage);
-		document.getElementById("display").innerText =
-			event.data.pluginMessage.score;
-		document.getElementById("grade-display").innerHTML =
-			event.data.pluginMessage.grade;
+		// Sets theme on load
+		if (msg.type === "theme" && msg.theme === "dark") {
+			document.body.classList.add("dark-theme");
+		}
+
+		if (msg.type === "selection") {
+			////////
+			// I apologise for this hacky workaround that doesn't even really need to exist.
+			msg.score === "I can't do numbers :("
+				? changeDisplayFontSize("1.5em")
+				: changeDisplayFontSize("3em");
+			///////
+
+			console.log("got this from the plugin code", msg);
+			document.getElementById("display").innerText = msg.score;
+			document.getElementById("grade-display").innerHTML = msg.grade;
+		}
 	};
 
 	let slideIndex = 1;
@@ -64,28 +94,74 @@
 
 <style>
 	body {
-		font-family: Inter, sans-serif;
+		--text-color: #000000;
+		--btn-text-color: rgba(0, 0, 0, 0.25);
+		--bkg-color: #fff;
+		--btn-hover: rgba(18, 19, 19, 0.05);
+	}
+
+	body.dark-theme {
+		--btn-text-color: rgb(236 236 236 / 58%);
+		--text-color: #ececec;
+		--bkg-color: #000000;
+		--btn-hover: rgb(228 239 239 / 25%);
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	html {
+		margin: 0;
 		padding: 0;
+	}
+
+	body {
+		font-family: Inter, sans-serif;
+		background-color: var(--bkg-color);
+		color: var(--text-color);
+		transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 	}
 
 	button {
 		margin-bottom: 12px;
-		border: 1px solid rgba(0, 0, 0, 0.54);
+		border: 1px solid var(--text-color, (0, 0, 0, 0.54));
 		padding: 2px 4px;
 		border-radius: 4px;
-		color: #607d8b;
+		color: var(--text-color);
 		box-sizing: border-box;
 		font-size: 0.8125rem;
-		background-color: transparent;
+		background-color: var(--bkg-color);
 		min-width: 64px;
-		transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-			box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-			border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+		transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 	}
 
 	button:hover {
-		border: 1px solid #607d8b;
-		background-color: rgba(96, 125, 139, 0.04);
+		background-color: var(--btn-hover);
+		transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	}
+
+	.btn-toggle {
+		padding: 0;
+		min-width: 30px;
+		min-height: 30px;
+		font-size: 1.5em;
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		background-color: var(--bkg-color);
+		color: var(--btn-text-color);
+		border: 1px solid transparent;
+		/* border: none; */
+		border-radius: 50px;
+		transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+		z-index: 1;
+	}
+
+	.btn-toggle:hover {
+		/* border: 1px solid var(--btn-text-color); */
+		background-color: var(--btn-hover);
+		transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 	}
 
 	#main {
@@ -101,9 +177,9 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 5px;
-		border: 1px solid rgba(0, 0, 0, 0.54);
+		border: 1px solid var(--text-color, (0, 0, 0, 0.54));
 		border-radius: 4px;
-		height: 95%;
+		height: 100%;
 	}
 
 	.score-header {
@@ -121,7 +197,7 @@
 	.subheader {
 		position: absolute;
 		top: 68px;
-		color: rgba(0, 0, 0, 0.38);
+		color: var(--text-color, (0, 0, 0, 0.38));
 		font-size: 0.8em;
 		font-weight: lighter;
 	}

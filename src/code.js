@@ -46,8 +46,6 @@ const sentences = string => {
   return string.split('. ').length;
 };
 
-figma.showUI(__html__);
-
 const scoreToAgeObj = {
   0: 'Under 6',
   1: '6 - 7',
@@ -70,21 +68,30 @@ const scoreToAge = score => {
 		: score === "I can't do numbers :(" ? score : scoreToAgeObj[score];
 };
 
-figma.ui.resize(300, 200);
+figma.showUI(__html__);
 
+figma.on('run', async () => {
+  const currentTheme = await figma.clientStorage.getAsync('theme');
+
+  figma.ui.postMessage({ type: 'theme', theme: currentTheme });
+});
+
+figma.ui.resize(300, 220);
+
+figma.ui.onmessage = msg => {
+	// setting theme type in figma clientStorage
+  if (msg.type === 'theme-change') {
+    figma.clientStorage.setAsync('theme', msg.theme);
+  }
+};
+
+// Handles sending flesch results to the UI
 figma.on('selectionchange', e => {
   const selection = figma.currentPage.selection[0];
 
-	// const selectexTextNode = figma.currentPage.selectedTextRange;
-
-	// Enable this if you want to do it on highlighted text
-	//   let highlightedText = selection.characters.slice(
-	// 		selectexTextNode.start,
-	// 		selectexTextNode.end
-
   if (selection && selection.type !== 'TEXT') {
     const result = 'No Text';
-    const results = { score: result, grade: result };
+    const results = { type: 'selection', score: result, grade: result };
 
     figma.ui.postMessage(results);
   }
@@ -110,7 +117,11 @@ figma.on('selectionchange', e => {
 
     const readingAge = scoreToAge(readingGrade);
 
-    const results = { score: readingScore, grade: readingAge };
+    const results = {
+      type: 'selection',
+      score: readingScore,
+      grade: readingAge
+    };
 
     figma.ui.postMessage(results);
   }
