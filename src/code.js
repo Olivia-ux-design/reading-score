@@ -68,15 +68,17 @@ const scoreToAge = score => {
 		: score === "I can't do numbers :(" ? score : scoreToAgeObj[score];
 };
 
-figma.showUI(__html__);
+figma.showUI(__html__, {
+  width: 300,
+  height: 220,
+  title: 'Flesch-Kincaid Score'
+});
 
 figma.on('run', async () => {
   const currentTheme = await figma.clientStorage.getAsync('theme');
 
   figma.ui.postMessage({ type: 'theme', theme: currentTheme });
 });
-
-figma.ui.resize(300, 220);
 
 figma.ui.onmessage = msg => {
 	// setting theme type in figma clientStorage
