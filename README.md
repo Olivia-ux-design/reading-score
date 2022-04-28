@@ -18,4 +18,4 @@ npm run watch-build
 
 4. Make any changes to the info and click Publish
 
-5. Stay Hydrated
+5. Stay Hydrated :potable_water:
