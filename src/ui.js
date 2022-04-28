@@ -31,11 +31,11 @@ const toggleTheme = () => {
 
 // Part of the dodgy workaround
 const changeDisplayFontSize = size => {
-  const scoreFontSize = document.getElementById('display').style.fontSize;
-  const gradeFontSize = document.getElementById('grade-display').style.fontSize;
+  const scoreStyle = document.getElementById('display').style;
+  const gradeStyle = document.getElementById('grade-display').style;
 
-  scoreFontSize = size;
-  gradeFontSize = size;
+  scoreStyle.fontSize = size;
+  gradeStyle.fontSize = size;
 };
 
 // This runs every time window.onmessage receives a message from figma
