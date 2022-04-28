@@ -2,7 +2,7 @@
   "name": "reading-score",
   "id": "1100467129508226903",
   "api": "1.0.0",
-  "main": "./dist/bundle.js",
-  "ui": "ui.html",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
   "editorType": ["figma"]
 }
