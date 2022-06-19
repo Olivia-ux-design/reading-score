@@ -1,5 +1,7 @@
 import './ui.css';
 
+const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
 const themeBtn = document.querySelector('.btn-toggle');
 const scoreBtn = document.getElementsByClassName('score-toggle');
 
@@ -7,6 +9,8 @@ const scoreBtn = document.getElementsByClassName('score-toggle');
 for (let btn of scoreBtn) {
   btn.onclick = () => switchPanel(1);
 }
+
+if (dark) document.body.classList.add('dark-theme');
 
 // Assigns an onclick function the the toggle theme button
 themeBtn.onclick = () => toggleTheme();
@@ -18,25 +22,25 @@ const toggleTheme = () => {
   const isDark = document.body.classList.contains('dark-theme');
 
 	// Sends a message to figma.ui with the current theme
-  parent.postMessage(
-    {
-      pluginMessage: {
-        type: 'theme-change',
-        theme: isDark ? 'dark' : 'light'
-      }
-    },
-		'*'
-	);
+	// parent.postMessage(
+	//   {
+	//     pluginMessage: {
+	//       type: 'theme-change',
+	//       theme: isDark ? 'dark' : 'light'
+	//     }
+	//   },
+	// 	'*'
+	// );
 };
 
-// Part of the dodgy workaround
-const changeDisplayFontSize = size => {
-  const scoreStyle = document.getElementById('display').style;
-  const gradeStyle = document.getElementById('grade-display').style;
+// Don't need this whilst using Emoji for scoring a number
+// const changeDisplayFontSize = size => {
+//   const scoreStyle = document.getElementById('display').style;
+//   const gradeStyle = document.getElementById('age-display').style;
 
-  scoreStyle.fontSize = size;
-  gradeStyle.fontSize = size;
-};
+//   scoreStyle.fontSize = size;
+//   gradeStyle.fontSize = size;
+// };
 
 // This runs every time window.onmessage receives a message from figma
 onmessage = event => {
@@ -51,14 +55,19 @@ onmessage = event => {
   if (msg.type === 'selection') {
 		/// /////
 		// I apologise for this hacky workaround that doesn't even really need to exist.
-    msg.score === justNumbers
-			? changeDisplayFontSize('1.5em')
-			: changeDisplayFontSize('3em');
+		// msg.score === justNumbers
+		// 	? changeDisplayFontSize('1.5em')
+		// 	: changeDisplayFontSize('3em');
 		/// ////
 
     console.log('got this from the plugin code', msg);
     document.getElementById('display').innerText = msg.score;
-    document.getElementById('grade-display').innerHTML = msg.grade;
+    document.getElementById('age-display').innerHTML = msg.age;
+    const decriptions = document.getElementsByClassName('description');
+
+    for (let text of decriptions) {
+      text.innerHTML = msg.description;
+    }
   }
 };
 
