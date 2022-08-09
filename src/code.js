@@ -83,17 +83,17 @@ const scoreToAgeObj = {
   15: {
     age: 'Over 18',
     description:
-			'Very difficult to read. Best understoof by university graduates.'
+			'Very difficult to read. Best understood by university graduates.'
   },
   16: {
     age: 'Over 18',
     description:
-			'Very difficult to read. Best understoof by university graduates.'
+			'Very difficult to read. Best understood by university graduates.'
   },
   17: {
     age: 'Over 18',
     description:
-			'Very difficult to read. Best understoof by university graduates.'
+			'Very difficult to read. Best understood by university graduates.'
   },
   18: {
     age: 'Over 18',
