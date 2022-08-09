@@ -138,7 +138,12 @@ figma.on('selectionchange', e => {
 
   if (selection && selection.type !== 'TEXT') {
     const result = 'No Text';
-    const results = { type: 'selection', score: result, grade: result };
+    const results = {
+      type: 'selection',
+      score: result,
+      age: result,
+      description: ''
+    };
 
     figma.ui.postMessage(results);
   }
