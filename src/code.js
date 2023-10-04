@@ -77,8 +77,8 @@ const scoreToAge = (score) => {
 };
 
 figma.showUI(__html__, {
-  width: 300,
-  height: 250,
+  width: 348,
+  height: 320,
   title: "Flesch-Kincaid Score"
 });
 
@@ -104,7 +104,8 @@ figma.on("selectionchange", (e) => {
       type: "selection",
       score: result,
       age: result,
-      description: ""
+      description: "There is no text selected to grade.",
+      error: "No Text"
     };
 
     figma.ui.postMessage(results);
@@ -136,7 +137,8 @@ figma.on("selectionchange", (e) => {
       type: "selection",
       score: readingScore,
       age: readingAge.age,
-      description: readingAge.description
+      description: readingAge.description,
+      error: readingAge.error || ""
     };
 
     figma.ui.postMessage(results);

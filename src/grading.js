@@ -54,6 +54,7 @@ export const scoreToAgeObj = {
   },
   isNumber: {
     age: String.fromCodePoint(0x1f62c),
-    description: "I can't do numbers :("
+    description: "I can't do numbers :(",
+    error: "number"
   }
 };
