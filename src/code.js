@@ -53,14 +53,17 @@ const words = (string) => {
 };
 
 const sentences = (string) => {
-  const getPunctuation = string.match(/\!|\?|\./g);
+  // Readable seems to count : and  ; in its logic for sentences,
+  // but doesn't display that score in the UI. It displays a sentence score
+  // that doesn't include them. This is a WIP.
+  const sentenceRegex = /\!|\?|\.|\;|\:|\n/g;
+  const getPunctuation = string.match(sentenceRegex);
+  const getSentences = string
+    .split(sentenceRegex)
+    .map((x) => x.trim())
+    .filter(Boolean);
 
-  return getPunctuation
-    ? string
-        .split(getPunctuation)
-        .map((x) => x.trim())
-        .filter(Boolean).length
-    : 1;
+  return getPunctuation ? getSentences.length : 1;
 };
 
 const scoreToAge = (score) => {
